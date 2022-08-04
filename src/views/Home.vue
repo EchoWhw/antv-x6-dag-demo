@@ -1,22 +1,34 @@
 <template>
   <div>
-    <div>
-      <el-button type="primary" size="small" @click="getJSON">获取JSON数据</el-button>
-      <el-button type="primary" size="small" @click="start">开始运行</el-button>
-      <el-switch v-model="editable" active-text="编辑模式" inactive-text="运行模式" style="margin-left: 20px;"></el-switch>
-    </div>
-    <div class="x6-wrap">
-      <X6 ref="graphRef" :nodesData="nodesData" :editable="editable" />
-    </div>
+    <el-header class="top-wrap">
+    </el-header>
+    <el-container class="bottom-wrap">
+      <el-aside width="200px">
+        <side-bar></side-bar>
+      </el-aside>
+      <el-main>
+        <!-- <router-view></router-view> -->
+        <div>
+          <el-button type="primary" size="small" @click="getJSON">获取JSON数据</el-button>
+          <el-button type="primary" size="small" @click="start">开始运行</el-button>
+          <el-switch v-model="editable" active-text="编辑模式" inactive-text="运行模式" style="margin-left: 20px;"></el-switch>
+        </div>
+        <div class="x6-wrap">
+          <X6 ref="graphRef" :nodesData="nodesData" :editable="editable" />
+        </div>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
 import X6 from "@/components/x6/index.vue";
+import SideBar from '@/components/SideBar.vue';
 export default {
   name: "Home",
   components: {
     X6,
+    SideBar,
   },
   data() {
     return {
@@ -73,6 +85,22 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+.top-wrap {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  // background: #2d303a;
+  height: 60px;
+  z-index: 1000;
+}
+.bottom-wrap {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    min-height: calc(100% - 60px);
 }
 .x6-wrap {
   width: 80%;

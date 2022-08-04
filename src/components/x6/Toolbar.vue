@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <el-dialog title="格式化DAG" :visible.sync="showDAG">
+    <el-dialog title="格式化DAG" :visible.sync="showFormatDAG">
       <el-form :model="formDAG">
         <el-form-item label="布局类型">
           <el-radio-group v-model="formDAG.radioDAG" @change="changeRadioDAG">
@@ -36,7 +36,7 @@
         </template>
       </el-form>  
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showDAG = false">取 消</el-button>
+        <el-button @click="showFormatDAG = false">取 消</el-button>
         <el-button type="primary" @click="onSubmitDAG">确 定</el-button>
       </div>
     </el-dialog>
@@ -84,6 +84,37 @@
         </el-pagination>
       </div>
     </el-drawer>
+    <el-dialog title="设置DAG图名称" :visible.sync="showSetDAG">
+      <el-form :model="setFormDAG">
+        <el-form-item label="" prop="name">
+          <el-input v-model="setFormDAG.name"></el-input>
+        </el-form-item>
+        <el-form-item label="" prop="desc">
+          <el-input type="textarea" v-model="setFormDAG.desc"></el-input>
+        </el-form-item>
+        <el-form-item label="选择租户" prop="selectUser">
+          <el-select v-model="setFormDAG.selectUser">
+            <el-option v-for="item in selectUserOption" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="超时告警" prop="timeWarn">
+          <el-switch v-model="setFormDAG.timeWarn"></el-switch>
+        </el-form-item>
+        <el-form-item v-if="setFormDAG.timeWarn" prop="longTimes">
+          <el-input v-model.number="setFormDAG.longTimes">
+            <span slot="append">分</span>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="设置全局" prop="setValue">
+          <DynamicParams :schemasType="schemas" :paramsArray.sync="paramsArray"></DynamicParams>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showSetDAG = false">取 消</el-button>
+        <el-button type="primary">添加</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -135,7 +166,7 @@ export default {
         content: '关闭',
         icon: 'el-icon-switch-button'
       }],
-      showDAG: false,
+      showFormatDAG: false,
       formDAG: {
         radioDAG: 6,
         rowNum: 0,
@@ -178,7 +209,34 @@ export default {
         pagesize: 1,
         currentPage: 1
       },
-      total: 0
+      total: 0,
+      showSetDAG: false,
+      setFormDAG: {
+        name: '样例3',
+        desc: '读文件转换文件格式',
+        selectUser: '',
+        timeWarn: false,
+        longTimes: 0,
+        setValue: []
+      },
+      selectUserOption: [{
+        label: 'default',
+        value: 'default'
+      }, {
+        label: 'dolphinscheduler',
+        value: 'dolphinscheduler'
+        }],
+      schemas: {},
+      paramsArray: [],
+    }
+  },
+  watch: {
+    paramsArray: {
+      immediate: true,
+      deep: true,
+      handler (val) {
+        this.shellData.params = val
+      }
     }
   },
   mounted() {
@@ -190,7 +248,7 @@ export default {
       this.$set(this.formDAG, 'colNum', 0)
     },
     onSubmitDAG () {
-      this.showDAG = false
+      this.showFormatDAG = false
       console.log(this.formDAG)
     },
     deleteRow(row, table) {
@@ -212,9 +270,11 @@ export default {
           this.$refs.serchInput.focus()
         })
       } else if (id === '4') {
-        this.showDAG = true
+        this.showFormatDAG = true
       } else if (id === '6') {
         this.versionDialog = true
+      } else if (id === '7') {
+        this.showSetDAG = true
       } else {
         console.log(id)
       }
