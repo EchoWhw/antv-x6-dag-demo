@@ -110,17 +110,27 @@
           <DynamicParams :schemasType="schemas" :paramsArray.sync="paramsArray"></DynamicParams>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="showSetDAG = false">取 消</el-button>
-        <el-button type="primary">添加</el-button>
+      <div slot="footer" class="dialog-footer saveDialog">
+        <div>
+          <el-checkbox v-model="setFormDAG.checked">是否上线流程定义</el-checkbox>
+        </div>
+        <div>
+          <el-button @click="showSetDAG = false">取 消</el-button>
+          <el-button type="primary">添加</el-button>
+        </div>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import dataParams from "@/mock/paramsForm";
+import DynamicParams from '../form/component/DynamicParams.vue';
 export default {
   name: 'Toolbar',
+  components: {
+    DynamicParams
+  },
   data () {
     return {
       searchNode: '',
@@ -217,7 +227,8 @@ export default {
         selectUser: '',
         timeWarn: false,
         longTimes: 0,
-        setValue: []
+        setValue: [],
+        checked: false
       },
       selectUserOption: [{
         label: 'default',
@@ -235,12 +246,14 @@ export default {
       immediate: true,
       deep: true,
       handler (val) {
-        this.shellData.params = val
+        this.setFormDAG.setValue = val
       }
     }
   },
   mounted() {
     this.getListVersion()
+    const schemas = Object.assign({}, dataParams);
+    this.schemas = schemas?.shellForm;
   },
   methods: {
     changeRadioDAG () {
@@ -352,5 +365,12 @@ export default {
 }
 ::v-deep .el-pagination {
   margin-top: 30px;
+}
+.saveDialog {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #dcdedc;
+  padding-top: 10px;
 }
 </style>

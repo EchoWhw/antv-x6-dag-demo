@@ -94,8 +94,12 @@ export default {
     };
   },
   watch: {
-    schemasType (val) {
-      this.schemas = val
+    schemasType: {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        this.schemas = val
+      }
     },
     paramsArray (val) {
       this.schemasData.params = this.paramsArray
@@ -115,7 +119,7 @@ export default {
     initSchemas() {
       this.schemasData.params = this.paramsArray
     },
-    addParams() {
+    addParams () {
       const paramsObject = this.schemas.paramsValue.reduce((pre, cur) => {
         pre[cur.prop] = cur.value;
         return pre;
