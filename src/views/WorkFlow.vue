@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div>
+  <div class="workFlow">
+    <div class="btnMenu">
       <el-button type="primary" size="small" @click="getJSON">获取JSON数据</el-button>
       <el-button type="primary" size="small" @click="start">开始运行</el-button>
       <el-switch v-model="editable" active-text="编辑模式" inactive-text="运行模式" style="margin-left: 20px;"></el-switch>
@@ -74,10 +74,15 @@ export default {
   margin: 0;
   padding: 0;
 }
+.btnMenu {
+  height: 40px
+}
+.workFlow {
+  height: 100%;
+}
 .x6-wrap {
-  width: 80%;
-  height: 600px;
-  margin: 100px auto;
-  border: 1px solid red;
+  width: 100%;
+  height: calc(100% - 50px);
+  margin: 10px auto;
 }
 </style>
